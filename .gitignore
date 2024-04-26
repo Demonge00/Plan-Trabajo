@@ -1,0 +1,7 @@
+env/
+backend/backend/__pycache__
+*.pyc
+db.sqlite3
+.env
+.env.bat
+*.pem
