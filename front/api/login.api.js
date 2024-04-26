@@ -3,6 +3,5 @@ const login = axios.create({
     baseURL: 'http://localhost:8000/workplans/register/'
 })
 export const registerUser = (data) => {
-    console.log(Sheeet)
     return login.post("/", data)
 }
