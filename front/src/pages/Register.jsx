@@ -30,16 +30,17 @@ function Register() {
       password: password,
     };
     registerUser(userinfo)
-      .then(() => {
+      .then((response) => {
+        console.log(response.status);
         setLoading(false), setSubmit(true), setSucces(true);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.log(error.response.data.message);
         setLoading(false), setSubmit(true), setSucces(false);
       });
   };
 
   useEffect(() => {
-    if (loading || succes || submit) console.log("test");
     if (password || rpassword) {
       if (checkPasswordComplexity(password, rpassword).length == 0)
         setPassGood(true);
@@ -47,7 +48,7 @@ function Register() {
     }
     if (name && checkEmailComplex(email) && passGood) setButtonEn(true);
     else setButtonEn(false);
-  }, [email, name, password, rpassword, passGood, submit, loading, succes]);
+  }, [email, name, password, rpassword, passGood]);
 
   if (submit) {
     return (
