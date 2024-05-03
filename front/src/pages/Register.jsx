@@ -1,71 +1,52 @@
 import { Button, Link } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { checkPasswordComplexity, checkEmailComplex } from "../utilities";
 import { registerUser } from "../../api/login.api";
+import { useMutation } from "@tanstack/react-query";
 
 function Register() {
-  // const [userInfo, setUserInfo] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-
-  // setUserInfo((data) => ({ ...data, name: "jgkglhgl" })); //Agrupar propiedades
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rpassword, setRPassword] = useState("");
-  const [buttonEn, setButtonEn] = useState(false);
-  const [passGood, setPassGood] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    name: "",
+    email: "",
+    password: "",
+    verify_password: "",
+  });
   const [submit, setSubmit] = useState(false);
-  const [succes, setSucces] = useState(false);
+  const {
+    mutate: Registrarse,
+    isPending,
+    isSuccess,
+    isError,
+  } = useMutation({
+    mutationFn: (data) => registerUser(data),
+    onSettled: () => {
+      setSubmit(true);
+    },
+  });
+
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("test");
     const userinfo = {
-      name: name,
-      email: email,
-      password: password,
+      name: userInfo.name,
+      email: userInfo.email,
+      password: userInfo.password,
     };
-    registerUser(userinfo)
-      .then((response) => {
-        console.log(response.status);
-        setLoading(false), setSubmit(true), setSucces(true);
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-        setLoading(false), setSubmit(true), setSucces(false);
-      });
+    Registrarse(userinfo);
   };
 
-  useEffect(() => {
-    if (password || rpassword) {
-      if (checkPasswordComplexity(password, rpassword).length == 0)
-        setPassGood(true);
-      else setPassGood(false);
-    }
-    if (name && checkEmailComplex(email) && passGood) setButtonEn(true);
-    else setButtonEn(false);
-  }, [email, name, password, rpassword, passGood]);
+  const passGood =
+    checkPasswordComplexity(userInfo.password, userInfo.verify_password)
+      .length == 0;
+  const buttonEnabled =
+    userInfo.name && checkEmailComplex(userInfo.email) && passGood;
 
-  if (submit) {
+  if (submit && isSuccess) {
     return (
       <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
-        {succes ? (
-          <h1 className=" text-lg font-medium md:text-2xl ">
-            Registro correcto. Revise su email para confirmar su cuenta.
-          </h1>
-        ) : (
-          <h1 className=" text-lg font-medium md:text-2xl ">
-            No se pudo completar su registro intente{" "}
-            <Link href="register" color="primary" className=" md:text-2xl">
-              registrarse
-            </Link>{" "}
-            nuevamente.
-          </h1>
-        )}
+        <h1 className=" text-lg font-medium md:text-2xl ">
+          Registro correcto. Revise su email para confirmar su cuenta.
+        </h1>
       </div>
     );
   } else
@@ -75,7 +56,17 @@ function Register() {
           className=" w-72 sm:w-1/2 xl:w-1/4 text-base flex flex-col items-center gap-4 bg-green-500 rounded px-2 sm:px-12 py-6 shadow-md shadow-green-800"
           onSubmit={submitHandler}
         >
-          <h1 className="  font-medium text-2xl ">Registrate!</h1>
+          {isError ? (
+            <h1 className="  font-medium text-2xl">
+              No se pudo completar su registro intente{" "}
+              <Link href="register" color="primary" className=" md:text-2xl">
+                registrarse
+              </Link>{" "}
+              nuevamente.
+            </h1>
+          ) : (
+            <h1 className="  font-medium text-2xl ">Registrate!</h1>
+          )}
           <div className="w-full text-left font-bold text-[0.8rem]">
             <label htmlFor="rname" className="block text-start">
               Nombre:
@@ -86,8 +77,10 @@ function Register() {
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
               id="rname"
               required
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={userInfo.name}
+              onChange={(e) =>
+                setUserInfo((data) => ({ ...data, name: e.target.value }))
+              }
             />
           </div>
           <div className="w-full font-bold text-[0.8rem]">
@@ -100,8 +93,10 @@ function Register() {
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
               id="remail"
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={userInfo.email}
+              onChange={(e) =>
+                setUserInfo((data) => ({ ...data, email: e.target.value }))
+              }
             />
           </div>
           <div className="w-full font-bold text-[0.8rem]">
@@ -114,8 +109,10 @@ function Register() {
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
               id="rpassword"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              value={userInfo.password}
+              onChange={(e) =>
+                setUserInfo((data) => ({ ...data, password: e.target.value }))
+              }
             />
           </div>
           <div className="w-full font-bold text-[0.8rem]">
@@ -128,16 +125,24 @@ function Register() {
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
               id="rvpassword"
               required
-              value={rpassword}
-              onChange={(e) => setRPassword(e.target.value)}
+              value={userInfo.verify_password}
+              onChange={(e) =>
+                setUserInfo((data) => ({
+                  ...data,
+                  verify_password: e.target.value,
+                }))
+              }
             />
           </div>
-          {password ? (
+          {userInfo.password ? (
             passGood ? (
               <div>Password is Correct</div>
             ) : (
               <ul className=" bg-white w-full rounded border-black text-base">
-                {checkPasswordComplexity(password, rpassword).map((e) => {
+                {checkPasswordComplexity(
+                  userInfo.password,
+                  userInfo.verify_password
+                ).map((e) => {
                   if (e) return <li key={e}>{e}</li>;
                 })}
               </ul>
@@ -149,8 +154,8 @@ function Register() {
             color="primary"
             className=" w-1/2 text-xl"
             type="submit"
-            isDisabled={!buttonEn}
-            isLoading={loading}
+            isDisabled={!buttonEnabled}
+            isLoading={isPending}
           >
             Submit
           </Button>

@@ -14,6 +14,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(default=timezone.now)
     sent_verification_email = models.BooleanField(default=False)
     verificated = models.BooleanField(default=False)
+    verification_secret = models.CharField(
+        max_length=200, default=None, null=True)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ['name']
