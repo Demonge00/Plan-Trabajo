@@ -1,21 +1,25 @@
 import { Button, Link } from "@nextui-org/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { registerUser } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 
-function Register() {
-  // const [userInfo, setUserInfo] = useState({
-  //   name: "",
-  //   email: "",
-  //   password: "",
-  // });
-
-  // setUserInfo((data) => ({ ...data, name: "jgkglhgl" })); //Agrupar propiedades
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [buttonEn, setButtonEn] = useState(false);
+  const [submit, setSubmit] = useState(false);
   const navigate = useNavigate();
-  const { loading, submit, succes, register } = registerUser();
+  const {
+    mutate: Registrarse,
+    isPending,
+    isSuccess,
+    isError,
+  } = useMutation({
+    mutationFn: (data) => registerUser(data),
+    onSettled: () => {
+      setSubmit(true);
+    },
+  });
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -27,10 +31,7 @@ function Register() {
     register(userinfo);
   };
 
-  useEffect(() => {
-    if (email && password) setButtonEn(true);
-    else setButtonEn(false);
-  }, [email, password]);
+  const buttonEnabled = email && password;
 
   if (submit) {
     return (
@@ -39,9 +40,9 @@ function Register() {
           navigate("/profile")
         ) : (
           <h1 className=" text-lg font-medium md:text-2xl ">
-            No se pudo completar su registro intente{" "}
-            <Link href="register" color="primary" className=" md:text-2xl">
-              registrarse
+            No se pudo completar su inicio de sección intente{" "}
+            <Link href="login" color="primary" className=" md:text-2xl">
+              loguearse
             </Link>{" "}
             nuevamente.
           </h1>
@@ -90,14 +91,14 @@ function Register() {
             color="primary"
             className=" w-1/2 text-xl"
             type="submit"
-            isDisabled={!buttonEn}
+            isDisabled={!buttonEnabled}
             isLoading={loading}
           >
-            Conectarse
+            Iniciar sección
           </Button>
         </form>
       </div>
     );
 }
 
-export default Register;
+export default Login;

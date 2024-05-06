@@ -39,7 +39,7 @@ def registerUser(request):
             #     [request.data['email']],
             #     fail_silently=False,
             #     html_message=f'Porfavor ve a <a href="{
-            #         settings.VERIFICATION_URL}{verify_secret}">este email</a> para verificar tu cuenta.',
+            #         settings.VERIFICATION_URL}/{verify_secret}">este email</a> para verificar tu cuenta.',
             # )
             user.sent_verification_email = True
             user.save()
@@ -55,7 +55,6 @@ def registerUser(request):
 
 @api_view(['GET'])
 def verifyUser(request, verification_secret):
-
     try:
         user = User.objects.get(verification_secret=verification_secret)
         user.verificated = True

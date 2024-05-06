@@ -11,6 +11,7 @@ function Register() {
     password: "",
     verify_password: "",
   });
+  const [text, setText] = useState("");
   const [submit, setSubmit] = useState(false);
   const {
     mutate: Registrarse,
@@ -21,6 +22,10 @@ function Register() {
     mutationFn: (data) => registerUser(data),
     onSettled: () => {
       setSubmit(true);
+    },
+    onSuccess: (response) => {
+      console.log(response);
+      setText(response.data.html);
     },
   });
 
@@ -33,6 +38,7 @@ function Register() {
       password: userInfo.password,
     };
     Registrarse(userinfo);
+    console.log(text);
   };
 
   const passGood =
@@ -44,9 +50,7 @@ function Register() {
   if (submit && isSuccess) {
     return (
       <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
-        <h1 className=" text-lg font-medium md:text-2xl ">
-          Registro correcto. Revise su email para confirmar su cuenta.
-        </h1>
+        <h1 className=" text-lg font-medium md:text-2xl ">{text}</h1>
       </div>
     );
   } else
