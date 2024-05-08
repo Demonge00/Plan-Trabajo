@@ -1,5 +1,5 @@
 import { useContext, createContext, useMemo, useState } from "react";
-import jwt_decode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 const userContext = createContext();
 
@@ -22,7 +22,7 @@ export function UserDetailsProvider(props) {
       const newUserInfo = { ...userInfo };
       newUserInfo.accesToken = accesToken;
       newUserInfo.refreshToken = refreshToken;
-      const jwt_decoded = jwt_decode(newUserInfo.accesToken);
+      const jwt_decoded = jwtDecode(newUserInfo.accesToken);
       newUserInfo.name = jwt_decoded.name;
       setUserInfo(newUserInfo);
     }

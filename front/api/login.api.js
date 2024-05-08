@@ -8,3 +8,6 @@ export const registerUser = (data) => {
 export const secretVerify = (urls) => {
     return login.get("workplans/verify/"+urls)
 }
+export const loginFunc = (data) => {
+    return login.post("workplans/token/",data)
+}

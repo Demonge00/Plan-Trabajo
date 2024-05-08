@@ -1,23 +1,32 @@
-import { Button, Link } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import { registerUser } from "../../api/login.api";
+import { loginFunc } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { useUserDetails } from "../contents/UserContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submit, setSubmit] = useState(false);
+  const [userInfo, updateUserInfo] = useUserDetails();
   const navigate = useNavigate();
   const {
-    mutate: Registrarse,
+    mutate: loguearse,
     isPending,
     isSuccess,
     isError,
   } = useMutation({
-    mutationFn: (data) => registerUser(data),
+    mutationFn: (data) => loginFunc(data),
     onSettled: () => {
       setSubmit(true);
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSuccess: (response) => {
+      console.log(userInfo);
+      updateUserInfo(response.data.access, response.data.refresh);
     },
   });
 
@@ -28,27 +37,13 @@ function Login() {
       email: email,
       password: password,
     };
-    register(userinfo);
+    loguearse(userinfo);
   };
 
   const buttonEnabled = email && password;
 
-  if (submit) {
-    return (
-      <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
-        {succes ? (
-          navigate("/profile")
-        ) : (
-          <h1 className=" text-lg font-medium md:text-2xl ">
-            No se pudo completar su inicio de sección intente{" "}
-            <Link href="login" color="primary" className=" md:text-2xl">
-              loguearse
-            </Link>{" "}
-            nuevamente.
-          </h1>
-        )}
-      </div>
-    );
+  if (submit && isSuccess) {
+    return navigate("/");
   } else
     return (
       <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
@@ -56,8 +51,12 @@ function Login() {
           className=" w-72 sm:w-1/2 2xl:w-1/3 text-base flex flex-col items-center gap-4 bg-green-500 rounded px-2 sm:px-12 py-6 shadow-md shadow-green-800"
           onSubmit={submitHandler}
         >
-          <h1 className=" font-medium text-2xl ">Inicia sección y trabaja!</h1>
-
+          <h1 className=" font-medium text-2xl ">
+            Inicia sección y crea tus workplans!
+          </h1>
+          {isError ? (
+            <h1 className=" font-medium text-2xl ">Credenciales incorrectas</h1>
+          ) : null}
           <div className="w-full font-bold text-[0.8rem]">
             <label htmlFor="remail" className="block text-start">
               Email:
@@ -92,7 +91,7 @@ function Login() {
             className=" w-1/2 text-xl"
             type="submit"
             isDisabled={!buttonEnabled}
-            isLoading={loading}
+            isLoading={isPending}
           >
             Iniciar sección
           </Button>
