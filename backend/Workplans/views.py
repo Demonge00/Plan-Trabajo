@@ -3,7 +3,6 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
 from django.core.mail import send_mail
 from django.conf import settings
@@ -35,7 +34,7 @@ def registerUser(request):
             user = User.objects.create_user(
                 email=request.data['email'],
                 name=request.data['name'],
-                password=make_password(request.data['password']),
+                password=request.data['password'],
                 is_active=False,
                 is_staff=False,
                 verification_secret=verify_secret,

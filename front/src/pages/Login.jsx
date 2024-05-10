@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { loginFunc } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -9,7 +9,7 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [submit, setSubmit] = useState(false);
-  const [userInfo, updateUserInfo] = useUserDetails();
+  const { userInfo, updateUserInfo } = useUserDetails();
   const navigate = useNavigate();
   const {
     mutate: loguearse,
@@ -25,7 +25,7 @@ function Login() {
       console.log(error);
     },
     onSuccess: (response) => {
-      console.log(userInfo);
+      localStorage.setItem("userDetails", JSON.stringify(response.data));
       updateUserInfo(response.data.access, response.data.refresh);
     },
   });
@@ -39,11 +39,16 @@ function Login() {
     };
     loguearse(userinfo);
   };
+  useEffect(() => {
+    if (submit && isSuccess) {
+      navigate("/");
+    }
+  }, [userInfo, submit, isSuccess, navigate]);
 
   const buttonEnabled = email && password;
 
   if (submit && isSuccess) {
-    return navigate("/");
+    return <div>Test</div>;
   } else
     return (
       <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
@@ -54,9 +59,6 @@ function Login() {
           <h1 className=" font-medium text-2xl ">
             Inicia sección y crea tus workplans!
           </h1>
-          {isError ? (
-            <h1 className=" font-medium text-2xl ">Credenciales incorrectas</h1>
-          ) : null}
           <div className="w-full font-bold text-[0.8rem]">
             <label htmlFor="remail" className="block text-start">
               Email:
@@ -85,7 +87,11 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-
+          {isError ? (
+            <h1 className=" font-medium text-2xl w-full ">
+              Credenciales incorrectas
+            </h1>
+          ) : null}
           <Button
             color="primary"
             className=" w-1/2 text-xl"

@@ -1,4 +1,10 @@
-import { useContext, createContext, useMemo, useState } from "react";
+import {
+  useContext,
+  createContext,
+  useMemo,
+  useState,
+  useCallback,
+} from "react";
 import { jwtDecode } from "jwt-decode";
 
 const userContext = createContext();
@@ -12,21 +18,44 @@ export function useUserDetails() {
 }
 
 export function UserDetailsProvider(props) {
+  const jsonParsed = localStorage.getItem("userDetails")
+    ? JSON.parse(localStorage.getItem("userDetails"))
+    : null;
+  var userAccesToken = false;
+  var userRefreshToken = false;
+  var userName = false;
+  if (jsonParsed) {
+    if (jsonParsed.access) {
+      console.log("test");
+      userAccesToken = jsonParsed.access;
+      userName = jwtDecode(userAccesToken).name;
+    } else {
+      userAccesToken = false;
+      userName = false;
+    }
+    userRefreshToken = jsonParsed.refreshToken
+      ? jsonParsed.refreshToken
+      : false;
+  }
   const [userInfo, setUserInfo] = useState({
-    accesToken: false,
-    refreshToken: false,
-    name: false,
+    accesToken: userAccesToken,
+    refreshToken: userRefreshToken,
+    name: userName,
   });
-  const value = useMemo(() => {
-    function updateUserInfo(accesToken, refreshToken) {
-      const newUserInfo = { ...userInfo };
-      newUserInfo.accesToken = accesToken;
-      newUserInfo.refreshToken = refreshToken;
+  const updateUserInfo = useCallback((accesToken, refreshToken) => {
+    const newUserInfo = { ...userInfo };
+    newUserInfo.accesToken = accesToken;
+    newUserInfo.refreshToken = refreshToken;
+    if (accesToken == false) {
+      newUserInfo.name = false;
+    } else {
       const jwt_decoded = jwtDecode(newUserInfo.accesToken);
       newUserInfo.name = jwt_decoded.name;
-      setUserInfo(newUserInfo);
     }
-    return [{ ...userInfo, updateUserInfo }];
-  }, [userInfo]);
+    setUserInfo(newUserInfo);
+  }, []);
+  const value = useMemo(() => {
+    return { userInfo, updateUserInfo };
+  }, [updateUserInfo, userInfo]);
   return <userContext.Provider value={value} {...props} />;
 }

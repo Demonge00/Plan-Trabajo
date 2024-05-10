@@ -29,7 +29,11 @@ function Verify() {
           <h1 className=" text-lg font-medium md:text-2xl ">
             Su registro fue completado con exito!
             <br />
-            <Link href="login" color="primary" className=" md:text-2xl ">
+            <Link
+              href="http://localhost:5173/login"
+              color="primary"
+              className=" md:text-2xl "
+            >
               Inicie seccion
             </Link>{" "}
           </h1>

@@ -12,12 +12,16 @@ import {
   DropdownTrigger,
   Dropdown,
   DropdownMenu,
+  Avatar,
 } from "@nextui-org/react";
 import { useState } from "react";
 import Uho from "../assets/Uho.jpg";
+import { useUserDetails } from "./UserContext";
+import {} from "@nextui-org/react";
 
 export function NavbarX() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { userInfo, updateUserInfo } = useUserDetails();
 
   return (
     <Navbar
@@ -90,16 +94,39 @@ export function NavbarX() {
           </Link>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent justify="" className=" relative left-3">
-        <NavbarItem className="hidden sm:flex">
-          <Link href="login">Iniciar sección</Link>
-        </NavbarItem>
-        <NavbarItem className="hidden sm:flex">
-          <Button as={Link} color="primary" href="register" variant="flat">
-            Registrarse
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+      {userInfo.name === false ? (
+        <NavbarContent justify="" className=" relative left-3">
+          <NavbarItem className="hidden sm:flex">
+            <Link href="login">Iniciar sección</Link>
+          </NavbarItem>
+          <NavbarItem className="hidden sm:flex">
+            <Button as={Link} color="primary" href="register" variant="flat">
+              Registrarse
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      ) : (
+        <NavbarContent justify="" className=" relative left-3">
+          <NavbarItem className="hidden sm:flex">
+            <Link href="profile">
+              <Avatar name={userInfo.name} />
+            </Link>
+          </NavbarItem>
+          <NavbarItem className="hidden sm:flex">
+            <Button
+              as={Link}
+              color="danger"
+              href="login"
+              variant="flat"
+              onClick={(e) => {
+                updateUserInfo(false, false);
+              }}
+            >
+              Desconectarse
+            </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
       <NavbarMenu>
         <NavbarMenuItem key="blnk" className=" text-center">
           <Link color="primay" className="w-full" href="#" size="lg"></Link>
@@ -120,23 +147,44 @@ export function NavbarX() {
             Lista de planes de trabajo
           </Link>
         </NavbarMenuItem>
+
         <NavbarMenuItem
           key="login"
-          className=" text-center  border-b-1 border-black"
+          className={
+            userInfo.name === false
+              ? "text-center  border-b-1 border-black"
+              : "hidden"
+          }
         >
-          <Link href="login" color="foreground" size="lg">
+          <Link href="login" color="primary" size="lg">
             Iniciar sección
           </Link>
         </NavbarMenuItem>
+
         <NavbarMenuItem
           key="register"
-          className=" text-center  border-b-1 border-black"
+          className={userInfo.name === false ? "text-center " : "hidden"}
         >
-          <Link color="primary" href="register" size="lg">
+          <Link color="danger" href="register" size="lg">
             Registrarse
           </Link>
         </NavbarMenuItem>
-        <NavbarMenuItem key="register" className=" text-center ">
+        <NavbarMenuItem
+          key="profile"
+          className={
+            userInfo.name != false
+              ? "text-center  border-b-1 border-black"
+              : "hidden"
+          }
+        >
+          <Link color="primary" href="profile" size="lg">
+            Mi perfil
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem
+          key="logout"
+          className={userInfo.name != false ? "text-center " : "hidden"}
+        >
           <Link color="danger" href="login" size="lg">
             Cerrar Sección
           </Link>

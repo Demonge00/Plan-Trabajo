@@ -12,7 +12,7 @@ function App() {
         <NavbarX />
         <BrowserRouter>
           <Routes>
-            <Route path="/" />
+            <Route path="" element={<Register />} />
             <Route path="makeplan" />
             <Route path="listplans" />
             <Route path="profile" element={<Login />} />

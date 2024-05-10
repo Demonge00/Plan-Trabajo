@@ -57,7 +57,7 @@ function Register() {
     return (
       <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
         <form
-          className=" w-72 sm:w-1/2 xl:w-1/4 text-base flex flex-col items-center gap-4 bg-green-500 rounded px-2 sm:px-12 py-6 shadow-md shadow-green-800"
+          className=" w-72 sm:w-1/2 text-base flex flex-col items-center gap-4 bg-green-500 rounded px-2 sm:px-12 py-6 shadow-md shadow-green-800"
           onSubmit={submitHandler}
         >
           {isError ? (
