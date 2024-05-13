@@ -3,49 +3,41 @@ import { useEffect, useState } from "react";
 import { loginFunc } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import { checkPasswordComplexity } from "../utilities";
 import { useUserDetails } from "../contents/UserContext";
 
-function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [submit, setSubmit] = useState(false);
+function Profile() {
   const { userInfo, updateUserInfo } = useUserDetails();
+  const [name, setName] = useState(userInfo.name);
+  const [password, setPassword] = useState("");
+  const [verified_password, setVerifiedPassword] = useState("");
   const navigate = useNavigate();
-  const {
-    mutate: loguearse,
-    isPending,
-    isSuccess,
-    isError,
-  } = useMutation({
+  const { mutate: loguearse, isPending } = useMutation({
     mutationFn: (data) => loginFunc(data),
-    onSettled: () => {
-      setSubmit(true);
-    },
+    onSettled: () => {},
     onError: (error) => {
       console.log(error);
     },
     onSuccess: (response) => {
-      // localStorage.setItem("userDetails", JSON.stringify(response.data));
       updateUserInfo(response.data.access, response.data.refresh);
     },
   });
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("test");
     const userinfo = {
-      email: email,
+      name: name,
       password: password,
     };
     loguearse(userinfo);
   };
   useEffect(() => {
-    if (submit && isSuccess) {
-      navigate("/");
+    if (!userInfo.accesToken) {
+      navigate("/login");
     }
-  }, [userInfo, submit, isSuccess, navigate]);
-
-  const buttonEnabled = email && password;
+  }, [navigate, userInfo]);
+  const buttonEnabled =
+    name && checkPasswordComplexity(password, verified_password).length == 0;
 
   return (
     <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
@@ -57,22 +49,23 @@ function Login() {
           Inicia sección y crea tus workplans!
         </h1>
         <div className="w-full font-bold text-[0.8rem]">
-          <label htmlFor="remail" className="block text-start">
-            Email:
+          <label htmlFor="rname" className="block text-start">
+            Nuevo nombre:
           </label>
           <input
-            type="email"
+            type="name"
             placeholder="Introduzca su nombre completo"
             className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
-            id="remail"
+            id="rname"
+            defaultValue={name}
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="w-full font-bold text-[0.8rem]">
           <label htmlFor="rpassword" className="block text-start">
-            Password:
+            Nueva contraseña:
           </label>
           <input
             type="password"
@@ -84,10 +77,32 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {isError ? (
-          <h1 className=" font-medium text-2xl w-full ">
-            Credenciales incorrectas
-          </h1>
+        <div className="w-full font-bold text-[0.8rem]">
+          <label htmlFor="rpassword" className="block text-start">
+            Confirmar contraseña:
+          </label>
+          <input
+            type="password"
+            placeholder="Verifique su contraseña"
+            className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
+            id="rvpassword"
+            required
+            value={verified_password}
+            onChange={(e) => setVerifiedPassword(e.target.value)}
+          />
+        </div>
+        {password ? (
+          checkPasswordComplexity(password, verified_password) ? (
+            <ul className=" bg-white w-full">
+              {checkPasswordComplexity(password, verified_password).map((e) => {
+                if (e) {
+                  return <li key={e}>{e}</li>;
+                }
+              })}
+            </ul>
+          ) : (
+            <div />
+          )
         ) : null}
         <Button
           color="primary"
@@ -103,4 +118,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Profile;

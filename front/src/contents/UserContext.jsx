@@ -25,9 +25,9 @@ export function UserDetailsProvider(props) {
   var userRefreshToken = false;
   var userName = false;
   if (jsonParsed) {
-    if (jsonParsed.access) {
+    if (jsonParsed.accesToken) {
       console.log("test");
-      userAccesToken = jsonParsed.access;
+      userAccesToken = jsonParsed.accesToken;
       userName = jwtDecode(userAccesToken).name;
     } else {
       userAccesToken = false;
@@ -42,18 +42,23 @@ export function UserDetailsProvider(props) {
     refreshToken: userRefreshToken,
     name: userName,
   });
-  const updateUserInfo = useCallback((accesToken, refreshToken) => {
-    const newUserInfo = { ...userInfo };
-    newUserInfo.accesToken = accesToken;
-    newUserInfo.refreshToken = refreshToken;
-    if (accesToken == false) {
-      newUserInfo.name = false;
-    } else {
-      const jwt_decoded = jwtDecode(newUserInfo.accesToken);
-      newUserInfo.name = jwt_decoded.name;
-    }
-    setUserInfo(newUserInfo);
-  }, []);
+  const updateUserInfo = useCallback(
+    (accesToken, refreshToken) => {
+      const newUserInfo = { ...userInfo };
+      newUserInfo.accesToken = accesToken;
+      newUserInfo.refreshToken = refreshToken;
+      if (accesToken === false) {
+        newUserInfo.name = false;
+        console.log(newUserInfo);
+      } else {
+        const jwt_decoded = jwtDecode(newUserInfo.accesToken);
+        newUserInfo.name = jwt_decoded.name;
+      }
+      setUserInfo(newUserInfo);
+      localStorage.setItem("userDetails", JSON.stringify(newUserInfo));
+    },
+    [userInfo]
+  );
   const value = useMemo(() => {
     return { userInfo, updateUserInfo };
   }, [updateUserInfo, userInfo]);

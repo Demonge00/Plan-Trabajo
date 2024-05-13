@@ -140,7 +140,7 @@ function Register() {
           </div>
           {userInfo.password ? (
             passGood ? (
-              <div>Password is Correct</div>
+              <div></div>
             ) : (
               <ul className=" bg-white w-full rounded border-black text-base">
                 {checkPasswordComplexity(

@@ -17,12 +17,12 @@ import {
 import { useState } from "react";
 import Uho from "../assets/Uho.jpg";
 import { useUserDetails } from "./UserContext";
-import {} from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 
 export function NavbarX() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { userInfo, updateUserInfo } = useUserDetails();
-
+  const navitae = useNavigate();
   return (
     <Navbar
       maxWidth="full"
@@ -114,12 +114,10 @@ export function NavbarX() {
           </NavbarItem>
           <NavbarItem className="hidden sm:flex">
             <Button
-              as={Link}
               color="danger"
-              href="login"
-              variant="flat"
-              onClick={(e) => {
+              onPress={() => {
                 updateUserInfo(false, false);
+                navitae("/login");
               }}
             >
               Desconectarse
@@ -185,7 +183,14 @@ export function NavbarX() {
           key="logout"
           className={userInfo.name != false ? "text-center " : "hidden"}
         >
-          <Link color="danger" href="login" size="lg">
+          <Link
+            color="danger"
+            href="login"
+            size="lg"
+            onClick={() => {
+              updateUserInfo(false, false);
+            }}
+          >
             Cerrar Sección
           </Link>
         </NavbarMenuItem>
