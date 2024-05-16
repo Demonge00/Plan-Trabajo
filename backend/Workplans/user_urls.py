@@ -10,4 +10,6 @@ urlpatterns = [
     path('token/', views.MyTokenObtainPairView.as_view(),
          name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('profile/', views.userInfo, name='token_refresh'),
+    path('profile/update/', views.updateInfo, name='token_refresh'),
 ]

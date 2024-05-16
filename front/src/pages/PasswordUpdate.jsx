@@ -1,14 +1,12 @@
 import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
-import { updateProf } from "../../api/login.api";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { updatePassword } from "../../api/login.api";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { checkPasswordComplexity } from "../utilities";
-import { useUserDetails } from "../contents/UserContext";
 
-function Profile() {
-  const { userInfo, updateUserInfo } = useUserDetails();
-  const [name, setName] = useState(userInfo.name);
+function PasswordUpdate() {
+  const params = useParams();
   const [password, setPassword] = useState("");
   const [verified_password, setVerifiedPassword] = useState("");
   const navigate = useNavigate();
@@ -17,32 +15,26 @@ function Profile() {
     isPending,
     isError,
   } = useMutation({
-    mutationFn: (data) => updateProf(data),
+    mutationFn: (data) => updatePassword(data),
     onError: (error) => {
       console.log(error);
     },
-    onSuccess: (response) => {
-      updateUserInfo(response.data.access, response.data.refresh);
-      navigate("/");
+    onSuccess: () => {
+      navigate("/login");
     },
   });
-
   const submitHandler = (e) => {
     e.preventDefault();
-    const userinfo = { accesToken: userInfo.accesToken };
-    if (name) userinfo.name = name;
-    if (checkPasswordComplexity(password, verified_password).length == 0)
-      userinfo.password = password;
-    update(userinfo);
-  };
-  useEffect(() => {
-    if (!userInfo.accesToken) {
-      navigate("/login");
+    const userInfo = {
+      urls: params.updateSecret,
+      password: password,
+    };
+    if (checkPasswordComplexity(password, verified_password).length == 0) {
+      update(userInfo);
     }
-  }, [navigate, userInfo]);
+  };
   const buttonEnabled =
-    name || checkPasswordComplexity(password, verified_password).length == 0;
-
+    checkPasswordComplexity(password, verified_password).length == 0;
   return (
     <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
       <form
@@ -51,27 +43,12 @@ function Profile() {
       >
         {isError ? (
           <h1 className=" font-medium text-2xl ">
-            No se pudo actualizar la cuenta
+            No se pudo actualizar la contraseña
           </h1>
         ) : (
-          <h1 className=" font-medium text-2xl ">
-            Cambia tu informacion personal
-          </h1>
+          <h1 className=" font-medium text-2xl ">Actualiza la contraseña.</h1>
         )}
 
-        <div className="w-full font-bold text-[0.8rem]">
-          <label htmlFor="rname" className="block text-start">
-            Nuevo nombre:
-          </label>
-          <input
-            type="name"
-            placeholder="Introduzca su nombre completo"
-            className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
-            id="rname"
-            defaultValue={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
         <div className="w-full font-bold text-[0.8rem]">
           <label htmlFor="rpassword" className="block text-start">
             Nueva contraseña:
@@ -125,4 +102,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default PasswordUpdate;

@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button, Link } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { loginFunc } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
@@ -99,6 +99,9 @@ function Login() {
           Iniciar sección
         </Button>
       </form>
+      <Link href="/password" className=" text-xl">
+        Recuperar contraseña
+      </Link>
     </div>
   );
 }

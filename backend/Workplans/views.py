@@ -1,15 +1,20 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
+
 from django.core.mail import send_mail
 from django.conf import settings
 import sys
 from django.utils.crypto import get_random_string
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
+from Workplans.serialisers import UserSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
@@ -76,3 +81,30 @@ def verifyUser(request, verification_secret):
         return Response({'message': 'user_registered'}, status=status.HTTP_200_OK)
     except:
         return Response({'message': 'Unable to verify email'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def userInfo(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updateInfo(request):
+    flag = False
+    user = User.objects.get(email=request.user)
+    if "name" in request.data:
+        user.name = request.data['name']
+        flag = True
+    if "password" in request.data:
+        user.password = make_password(request.data["password"])
+        flag = True
+    if flag:
+        user.save()
+    access_token = RefreshToken.for_user(user)
+    access_token['name'] = user.name
+    return Response({'access': str(access_token.access_token),
+                     'refresh': str(access_token)}, status=status.HTTP_200_OK)

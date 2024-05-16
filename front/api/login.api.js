@@ -11,3 +11,12 @@ export const secretVerify = (urls) => {
 export const loginFunc = (data) => {
     return login.post("workplans/token/",data)
 }
+export const updateProf = (data) => {
+    return login.put("workplans/profile/update/",data, {headers:{Authorization: "Bearer " + data.accesToken}})
+}
+export const recoverPassword = (data) => {
+    return login.post("/workplans/password/", data)
+}
+export const updatePassword = (data) => {
+    return login.post("/workplans/password/"+data.urls, data)
+}
