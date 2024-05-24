@@ -142,8 +142,14 @@ def createWorkplan(request):
     user = request.user
     date = datetime.date(
         int(request.data["year"]), int(request.data["month"]), 1)
-    work = Workplans(date)
-    work.save()
-    work.custom_user.add(user)
-    user.save()
-    return Response(status=status.HTTP_200_OK)
+    try:
+        work = Workplans.objects.get(date=date)
+        work.custom_user.add(user)
+        work.save()
+        return Response({'message': 'plan conected'}, status=status.HTTP_200_OK)
+    except:
+        work = Workplans(4, date)
+        work.save()
+        work.custom_user.add(user)
+        work.save()
+        return Response({'message': 'plan created'}, status=status.HTTP_200_OK)
