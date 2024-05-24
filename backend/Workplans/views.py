@@ -148,7 +148,7 @@ def createWorkplan(request):
         work.save()
         return Response({'message': 'plan conected'}, status=status.HTTP_200_OK)
     except:
-        work = Workplans(4, date)
+        work = Workplans(date)
         work.save()
         work.custom_user.add(user)
         work.save()
