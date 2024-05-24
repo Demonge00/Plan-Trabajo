@@ -12,4 +12,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('profile/', views.userInfo, name='token_refresh'),
     path('profile/update/', views.updateInfo, name='token_refresh'),
+    path('password/', views.handleEmail, name='verify-user'),
+    path('password/<password_secret>', views.updatePassword, name='verify-user'),
+    path('create/', views.createWorkplan, name="create-workplan")
 ]

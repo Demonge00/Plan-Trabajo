@@ -1,3 +1,4 @@
+import datetime
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -5,9 +6,9 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
-
 from django.core.mail import send_mail
 from django.conf import settings
+from Workplans.models import Workplans, Activity
 import sys
 from django.utils.crypto import get_random_string
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -83,6 +84,31 @@ def verifyUser(request, verification_secret):
         return Response({'message': 'Unable to verify email'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+def handleEmail(request):
+    password_secret = get_random_string(length=32)
+    try:
+        user = User.objects.get(email=request.data['email'])
+        user.password_secret = password_secret
+        user.save()
+        print(f"Porfavor ve a <a href='http://localhost:5173/password/{
+              password_secret}'>este link</a> para verificar tu cuenta.")
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response({'message': "Mail doesnt exist"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+def updatePassword(request, password_secret):
+    try:
+        user = User.objects.get(password_secret=password_secret)
+        user.password = make_password(request.data['password'])
+        user.save()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response({'message': "Password cant be changed"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def userInfo(request):
@@ -108,3 +134,16 @@ def updateInfo(request):
     access_token['name'] = user.name
     return Response({'access': str(access_token.access_token),
                      'refresh': str(access_token)}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def createWorkplan(request):
+    user = request.user
+    date = datetime.date(
+        int(request.data["year"]), int(request.data["month"]), 1)
+    work = Workplans(date)
+    work.save()
+    work.custom_user.add(user)
+    user.save()
+    return Response(status=status.HTTP_200_OK)
