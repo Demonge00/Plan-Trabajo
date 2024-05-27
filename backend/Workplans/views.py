@@ -18,6 +18,7 @@ from Workplans.serialisers import UserSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
+monthdays = ['', 31, [28, 29], 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -148,8 +149,17 @@ def createWorkplan(request):
         work.save()
         return Response({'message': 'plan conected'}, status=status.HTTP_200_OK)
     except:
-        work = Workplans(date)
+        work = Workplans(date=date)
         work.save()
         work.custom_user.add(user)
         work.save()
+        days = monthdays[date.month]
+        if (date.month == 2):
+            # Añadir importar docss y esas cosas
+            days = monthdays[date.month][1] if date.year % 4 == 0 else monthdays[date.month][0]
+        for i in range(1, days + 1):
+            for j in range(1, 7):
+                activity = Activity(workplans=work, day=i, turn=j)
+                print(activity)
+                activity.save()
         return Response({'message': 'plan created'}, status=status.HTTP_200_OK)

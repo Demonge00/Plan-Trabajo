@@ -47,4 +47,4 @@ class Activity(models.Model):
         ordering = ["day", "turn"]
 
     def __str__(self):
-        return self.turn + " turno"
+        return "Dia " + str(self.day) + " " + " Turno " + str(self.turn)

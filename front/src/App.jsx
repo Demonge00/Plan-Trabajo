@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Homepage from "./pages/Homepage";
 import Password from "./pages/Password";
 import PasswordUpdate from "./pages/PasswordUpdate";
+import CreateWorkplan from "./pages/CreateWorkplan";
 
 import { UserDetailsProvider } from "./contents/UserContext";
 function App() {
@@ -18,7 +19,7 @@ function App() {
           <NavbarX />
           <Routes>
             <Route path="/" element={<Homepage />} />
-            <Route path="makeplan" />
+            <Route path="makeplan" element={<CreateWorkplan />} />
             <Route path="listplans" />
             <Route path="password" element={<Password />} />
             <Route path="password/:updateSecret" element={<PasswordUpdate />} />

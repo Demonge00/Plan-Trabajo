@@ -32,6 +32,11 @@ class CustomUserAdmin(UserAdmin):
     ordering = ("email",)
 
 
+class ActivityAdmin(admin.ModelAdmin):
+    list_display = [Activity.__str__, 'day', 'turn', 'activity']
+    fields = ['day', 'turn', 'activity', 'workplans']
+
+
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Workplans)
-admin.site.register(Activity)
+admin.site.register(Activity, ActivityAdmin)
