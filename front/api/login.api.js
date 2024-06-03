@@ -21,5 +21,6 @@ export const updatePassword = (data) => {
     return login.post("/workplans/password/"+data.urls, data)
 }
 export const createWorkplan = (data) => {
-    return login.post("/workplans/create/", data , {headers:{Authorization: "Bearer " + data.accesToken}})
+    console.log(data.get("name"))
+    return login.post("/workplans/create/", data , {headers:{Authorization: "Bearer " + data.get("token"),'Content-Type': 'multipart/form-data'}})
 }

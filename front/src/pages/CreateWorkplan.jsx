@@ -9,6 +9,7 @@ function CreateWorkplan() {
   const date = new Date();
   const [year, setYear] = useState(date.getFullYear());
   const [month, setMonth] = useState("");
+  const [file, setFile] = useState(null);
   const { userInfo } = useUserDetails();
   const navigate = useNavigate();
   const {
@@ -29,12 +30,13 @@ function CreateWorkplan() {
   const submitHandler = (e) => {
     e.preventDefault();
     console.log("test");
-    const data = {
-      accesToken: userInfo.accesToken,
-      year: year,
-      month: month,
-    };
-    crear(data);
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("token", userInfo.accesToken);
+    formData.append("month", month);
+    formData.append("year", year);
+    formData.append("name", file.name);
+    crear(formData);
   };
   useEffect(() => {
     if (!userInfo.accesToken) {
@@ -102,7 +104,7 @@ function CreateWorkplan() {
               type="file"
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
               id="file"
-              onChange={(e) => setMonth(e.target.value)}
+              onChange={(e) => setFile(e.target.files[0])}
             />
           </div>
 
