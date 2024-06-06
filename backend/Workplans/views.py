@@ -18,7 +18,7 @@ from django.utils.crypto import get_random_string
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
-from Workplans.serialisers import UserSerializer
+from Workplans.serialisers import UserSerializer, WorkplanSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
@@ -241,3 +241,15 @@ def createWorkplan(request):
                 print(activity)
                 activity.save()
         return Response({'message': 'plan created'}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def listPlans(request):
+    user = request.user
+    try:
+        lista = user.workplans_set.all()
+        serializer = WorkplanSerializer(lista, many=True)
+        return Response({'list': serializer.data, 'message': 'Done'}, status=status.HTTP_200_OK)
+    except:
+        return Response({'message': 'Trouble'}, status=status.HTTP_400_BAD_REQUEST)

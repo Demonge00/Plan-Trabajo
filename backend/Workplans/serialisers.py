@@ -11,3 +11,12 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return obj.name
+
+
+class WorkplanSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Workplans
+        fields = ['date']
+
+    def get_name(self, obj):
+        return obj.name

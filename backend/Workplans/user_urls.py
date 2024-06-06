@@ -14,5 +14,6 @@ urlpatterns = [
     path('profile/update/', views.updateInfo, name='token_refresh'),
     path('password/', views.handleEmail, name='verify-user'),
     path('password/<password_secret>', views.updatePassword, name='verify-user'),
-    path('create/', views.createWorkplan, name="create-workplan")
+    path('create/', views.createWorkplan, name="create-workplan"),
+    path('list/', views.listPlans, name="list-plans")
 ]

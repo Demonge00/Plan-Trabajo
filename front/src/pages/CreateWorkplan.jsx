@@ -1,5 +1,5 @@
 import { Button } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createWorkplan } from "../../api/login.api";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
@@ -11,6 +11,7 @@ function CreateWorkplan() {
   const [month, setMonth] = useState("");
   const [file, setFile] = useState(null);
   const { userInfo } = useUserDetails();
+  const fileInputRef = useRef(null);
   const navigate = useNavigate();
   const {
     mutate: crear,
@@ -29,14 +30,19 @@ function CreateWorkplan() {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log("test");
     const formData = new FormData();
-    formData.append("file", file);
+    if (file) {
+      formData.append("file", file);
+      formData.append("name", file.name);
+    }
     formData.append("token", userInfo.accesToken);
     formData.append("month", month);
     formData.append("year", year);
-    formData.append("name", file.name);
     crear(formData);
+  };
+  const resetFileInput = () => {
+    fileInputRef.current.value = "";
+    setFile(null);
   };
   useEffect(() => {
     if (!userInfo.accesToken) {
@@ -103,20 +109,30 @@ function CreateWorkplan() {
             <input
               type="file"
               className=" w-full bg-white text-black border-xs border-black rounded p-0.5"
+              ref={fileInputRef}
               id="file"
               onChange={(e) => setFile(e.target.files[0])}
             />
           </div>
-
-          <Button
-            color="primary"
-            className=" w-1/2 text-xl"
-            type="submit"
-            isDisabled={!buttonEnabled}
-            isLoading={isPending}
-          >
-            Crear Plan
-          </Button>
+          <div className="w-full">
+            <Button
+              onClick={resetFileInput}
+              color="primary"
+              className="mt-2 w-1/3 inline text-xl mr-5
+          "
+            >
+              Remover archivo
+            </Button>
+            <Button
+              color="primary"
+              className=" w-1/3 text-xl inline"
+              type="submit"
+              isDisabled={!buttonEnabled}
+              isLoading={isPending}
+            >
+              Crear Plan
+            </Button>
+          </div>
         </form>
       </div>
     );

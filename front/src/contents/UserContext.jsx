@@ -26,7 +26,6 @@ export function UserDetailsProvider(props) {
   var userName = false;
   if (jsonParsed) {
     if (jsonParsed.accesToken) {
-      console.log("test");
       userAccesToken = jsonParsed.accesToken;
       userName = jwtDecode(userAccesToken).name;
     } else {

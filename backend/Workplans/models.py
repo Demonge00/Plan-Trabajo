@@ -32,6 +32,9 @@ class Workplans(models.Model):
     date = models.DateField(null=False)
     custom_user = models.ManyToManyField(CustomUser)
 
+    class Meta:
+        ordering = ["date"]
+
     def __str__(self):
         return str(self.date)
 

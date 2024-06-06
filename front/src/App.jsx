@@ -9,6 +9,7 @@ import Homepage from "./pages/Homepage";
 import Password from "./pages/Password";
 import PasswordUpdate from "./pages/PasswordUpdate";
 import CreateWorkplan from "./pages/CreateWorkplan";
+import WorkplansList from "./pages/WorkplansList";
 
 import { UserDetailsProvider } from "./contents/UserContext";
 function App() {
@@ -20,7 +21,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Homepage />} />
             <Route path="makeplan" element={<CreateWorkplan />} />
-            <Route path="listplans" />
+            <Route path="listplans" element={<WorkplansList />} />
             <Route path="password" element={<Password />} />
             <Route path="password/:updateSecret" element={<PasswordUpdate />} />
             <Route path="profile" element={<Profile />} />
