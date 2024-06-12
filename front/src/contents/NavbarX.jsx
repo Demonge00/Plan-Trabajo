@@ -72,24 +72,24 @@ export function NavbarX() {
             }}
           >
             <DropdownItem key="autoscaling">
-              <Link color="foreground" href="makeplan">
+              <Link color="foreground" href="http://localhost:5173/makeplan">
                 Nuevo Plan de trabajo
               </Link>
             </DropdownItem>
             <DropdownItem key="usage_metrics">
-              <Link color="foreground" href="listplans">
+              <Link color="foreground" href="http://localhost:5173/listplans">
                 Lista de planes de trabajo
               </Link>
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <NavbarItem className="hidden xl:flex xl:pl-150">
-          <Link color="foreground" href="makeplan">
+          <Link color="foreground" href="http://localhost:5173/makeplan">
             Nuevo Plan de trabajo
           </Link>
         </NavbarItem>
         <NavbarItem className="hidden xl:flex xl:ml-20">
-          <Link color="foreground" href="listplans">
+          <Link color="foreground" href="http://localhost:5173/listplans">
             Lista de planes de trabajo
           </Link>
         </NavbarItem>

@@ -24,11 +24,21 @@ export const createWorkplan = (data) => {
     //console.log(data.get("name"))
     return login.post("/workplans/create/", data , {headers:{Authorization: "Bearer " + data.get("token"),'Content-Type': 'multipart/form-data'}})
 }
-export const obtainWorkplans = (header) => {
-    const response = login.get("workplans/list/",{headers:{Authorization: "Bearer " + header}})
-    return response
-
+export const obtainWorkplans = (header, onFetch) => {
+    login.get("workplans/list/",{headers:{Authorization: "Bearer " + header}}).then((request) =>{
+        onFetch(request.data.list)
+        return
+    }).catch((error) =>{
+        console.log(error)
+        return
+    })
 }
-export const selectPlan = (data) => {
-    return login.post("/workplans/select/", data , {headers:{Authorization: "Bearer " + data.get("token")}})
+export const selectPlan = (data, onFetch) => {
+    login.post("/workplans/select/", data.date , {headers:{Authorization: "Bearer " + data.accesToken}}).then((response) =>{
+        onFetch(response.data.list)
+        return
+    }).catch((error)=>{
+        console.log(error)
+        return
+    })
 }
