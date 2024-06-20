@@ -20,6 +20,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 from Workplans.serialisers import UserSerializer, WorkplanSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
+from dateparser import parse
 
 User = get_user_model()
 monthdays = ['', 31, [28, 29], 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -253,3 +254,23 @@ def listPlans(request):
         return Response({'list': serializer.data, 'message': 'Done'}, status=status.HTTP_200_OK)
     except:
         return Response({'message': 'Trouble'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def selectPlan(request):
+    user = request.user
+    fecha = parse(request.data['date'])
+    wokrplan = user.workplans_set.get(date=fecha)
+    response = {
+    }
+    for i in wokrplan.activity_set.all():
+        try:
+            response[i.day]
+            response[i.day][i.turn] = i.activity
+        except:
+            response[i.day] = {
+                i.turn: i.activity
+            }
+    print(response)
+    return Response(response, status=status.HTTP_200_OK)
