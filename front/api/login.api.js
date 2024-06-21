@@ -58,10 +58,32 @@ export const selectPlan = (data, onFetch) => {
       return;
     });
 };
-export const updatePlan = (data) => {
+export const updatePlan = (data, func) => {
+  func({
+    isError: false,
+    isPending: true,
+    isSuccess: false,
+  });
   login
-    .post("/workplans/update/", data, {
+    .post("/workplans/list/update", data, {
       headers: { Authorization: "Bearer " + data.accesToken },
     })
-    .then((response) => {});
+    .then((response) => {
+      func({
+        isError: false,
+        isPending: false,
+        isSuccess: true,
+      });
+      console.log(response.status);
+      return;
+    })
+    .catch((error) => {
+      func({
+        isError: true,
+        isPending: false,
+        isSuccess: false,
+      });
+      console.log(error);
+      return;
+    });
 };

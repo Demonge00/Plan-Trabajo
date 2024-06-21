@@ -31,7 +31,9 @@ export function NavbarX() {
       classNames={{
         wrapper: "flex flex-row justify-center",
       }}
+      shouldHideOnScroll
       isBordered="true"
+      isBlurred={false}
     >
       <NavbarContent
         justify="center"

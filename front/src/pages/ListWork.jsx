@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { selectPlan } from "../../api/login.api";
+import { selectPlan, updatePlan } from "../../api/login.api";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUserDetails } from "../contents/UserContext";
 import { textGenerator } from "../utilities";
@@ -10,7 +10,13 @@ function ListWork() {
   const [list, setList] = useState("");
   const [initdays, setInitDays] = useState([0]);
   const [pastMonthDay, setPastMonthDay] = useState(0);
+  const [status, setStatus] = useState({
+    isError: false,
+    isPending: false,
+    isSuccess: false,
+  });
   const [loading, setLoading] = useState(true);
+
   const navigate = useNavigate();
   const { userInfo } = useUserDetails();
   useEffect(() => {
@@ -74,25 +80,50 @@ function ListWork() {
     console.log(cap);
     setList(cap);
   };
+  const handleSubmit = () => {
+    updatePlan(list, (status) => setStatus(status));
+  };
+  if (status.isSuccess)
+    return (
+      <div className=" flex flex-col justify-center items-center h-5/6 gap-4 min-w-[320px]">
+        <h1 className=" text-lg font-medium md:text-2xl ">
+          Plan actualizado correctamente
+        </h1>
+      </div>
+    );
   if (loading) return <h1>Espere por favor</h1>;
   else
     return (
-      <div className=" flex flex-col items-center h-5/6 ">
+      <div className=" flex flex-col items-center">
         <div className=" flex flex-col justify-start flex-wrap gap-4  rounded ">
-          <h1 className=" mt-3 text-xl">
-            Plan de trabajo de {params.listDate}
-          </h1>
-
+          <div className="sticky mt-4 flex justify-center items-center w-full h-full border border-black z-1 top-0 bg-white">
+            <h1 className=" w-1/2 block">
+              Plan de trabajo de {params.listDate}
+            </h1>
+            <Button
+              color="primary"
+              className=" block border"
+              isLoading={status.isPending}
+              onClick={handleSubmit}
+            >
+              Actualizar
+            </Button>
+          </div>
           {initdays.map((e, index) => {
             const monthAux = index < 2 ? 0 : 1;
             return (
               <div key={e}>
                 <div className="w-[300px] border border-black border-b-0 sm:w-[700px]">
-                  {" "}
-                  Semana del {e} al{" "}
-                  {e + 6 == pastMonthDay[monthAux]
-                    ? pastMonthDay[monthAux]
-                    : (e + 6) % pastMonthDay[monthAux]}
+                  {status.isError ? (
+                    <p>Error al actualizar el plan de trabajo</p>
+                  ) : (
+                    <p>
+                      Semana del {e} al{" "}
+                      {e + 6 == pastMonthDay[monthAux]
+                        ? pastMonthDay[monthAux]
+                        : (e + 6) % pastMonthDay[monthAux]}
+                    </p>
+                  )}
                 </div>
                 <table className="w-[300px] border border-black text-xs sm:w-[700px] sm:text-sm">
                   <tbody>
