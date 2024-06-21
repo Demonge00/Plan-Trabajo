@@ -36,18 +36,18 @@ export function checkEmailComplex(email) {
   return false;
 }
 export function textGenerator(list, date, turn, pastMonthDay, index) {
-  if ((date == pastMonthDay[0] || date % pastMonthDay[0] > 7) && index + 1 == 1)
+  if ((date == pastMonthDay || date % pastMonthDay > 7) && index + 1 == 1) {
     return "Mes Pasado";
-  else if (
+  } else if (
     (index == 4 || index == 5) &&
-    date % pastMonthDay[1] < 7 &&
-    date != pastMonthDay[1]
+    date % pastMonthDay < 7 &&
+    date != pastMonthDay
   ) {
     return "Mes Proximo";
   } else {
-    if (list[date % pastMonthDay[0]]) {
-      if (list[date % pastMonthDay[0]][turn])
-        return list[date % pastMonthDay[0]][turn];
+    if (list[date % pastMonthDay]) {
+      if (list[date % pastMonthDay][turn])
+        return list[date % pastMonthDay][turn];
       else if (turn <= 3) return "Auto Preparacion";
       else return "Auto Superacion";
     } else if (turn <= 3) return "Auto Preparacion";

@@ -60,32 +60,15 @@ function ListWork() {
     selectPlan(info, (date) => {
       setList(date);
     });
-    setTimeout(() => setLoading(false), 2000);
+    setTimeout(() => setLoading(false), 1000); //Debo Revisar esto
   }, []);
-  const textGenerator = (date, turn, pastMonthDay, index) => {
-    if (
-      (date == pastMonthDay[0] || date % pastMonthDay[0] > 7) &&
-      index + 1 == 1
-    )
-      return "Mes Pasado";
-    else if (
-      (index == 4 || index == 5) &&
-      date % pastMonthDay[1] < 7 &&
-      date != pastMonthDay[1]
-    ) {
-      return "Mes Proximo";
-    } else {
-      if (list[date % pastMonthDay[0]]) {
-        if (list[date % pastMonthDay[0]][turn])
-          return list[date % pastMonthDay[0]][turn];
-        else if (turn <= 3) return "Auto Preparacion";
-        else return "Auto Superacion";
-      } else if (turn <= 3) return "Auto Preparacion";
-      else return "Auto Superacion";
-    }
-  };
   const handlerChange = (e, key, turn) => {
     var cap = { ...list };
+    if (
+      e.target.defaultValue == "Mes Pasado" ||
+      e.target.defaultValue == "Mes Proximo"
+    )
+      return;
     cap[key] = { ...cap[key] };
     cap[key][turn] = e.target.value;
     console.log(cap);
@@ -152,6 +135,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             1,
                             pastMonthDay[monthAux],
@@ -160,7 +144,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -170,6 +156,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             1,
                             pastMonthDay[monthAux],
@@ -178,7 +165,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -188,6 +177,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             1,
                             pastMonthDay[monthAux],
@@ -196,7 +186,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -206,6 +198,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             1,
                             pastMonthDay[monthAux],
@@ -214,7 +207,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -224,6 +219,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             1,
                             pastMonthDay[monthAux],
@@ -232,7 +228,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -242,6 +240,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             1,
                             pastMonthDay[monthAux],
@@ -250,7 +249,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               1
                             )
                           }
@@ -263,6 +264,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             2,
                             pastMonthDay[monthAux],
@@ -271,7 +273,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -281,6 +285,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             2,
                             pastMonthDay[monthAux],
@@ -289,7 +294,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -299,6 +306,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             2,
                             pastMonthDay[monthAux],
@@ -307,7 +315,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -317,6 +327,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             2,
                             pastMonthDay[monthAux],
@@ -325,7 +336,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -335,6 +348,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             2,
                             pastMonthDay[monthAux],
@@ -343,7 +357,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -353,6 +369,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             2,
                             pastMonthDay[monthAux],
@@ -361,7 +378,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               2
                             )
                           }
@@ -374,6 +393,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             3,
                             pastMonthDay[monthAux],
@@ -382,7 +402,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -392,6 +414,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             3,
                             pastMonthDay[monthAux],
@@ -400,7 +423,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -410,6 +435,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             3,
                             pastMonthDay[monthAux],
@@ -418,7 +444,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -428,6 +456,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             3,
                             pastMonthDay[monthAux],
@@ -436,7 +465,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -446,6 +477,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             3,
                             pastMonthDay[monthAux],
@@ -454,7 +486,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -464,6 +498,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             3,
                             pastMonthDay[monthAux],
@@ -472,7 +507,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               3
                             )
                           }
@@ -485,6 +522,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             4,
                             pastMonthDay[monthAux],
@@ -493,7 +531,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -503,6 +543,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             4,
                             pastMonthDay[monthAux],
@@ -511,7 +552,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -521,6 +564,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             4,
                             pastMonthDay[monthAux],
@@ -529,7 +573,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -539,6 +585,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             4,
                             pastMonthDay[monthAux],
@@ -547,7 +594,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -557,6 +606,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             4,
                             pastMonthDay[monthAux],
@@ -565,7 +615,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -575,6 +627,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             4,
                             pastMonthDay[monthAux],
@@ -583,7 +636,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               4
                             )
                           }
@@ -596,6 +651,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             5,
                             pastMonthDay[monthAux],
@@ -604,7 +660,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -614,6 +672,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             5,
                             pastMonthDay[monthAux],
@@ -622,7 +681,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -632,6 +693,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             5,
                             pastMonthDay[monthAux],
@@ -640,7 +702,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -650,6 +714,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             5,
                             pastMonthDay[monthAux],
@@ -658,7 +723,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -668,6 +735,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             5,
                             pastMonthDay[monthAux],
@@ -676,7 +744,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -686,6 +756,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             5,
                             pastMonthDay[monthAux],
@@ -693,8 +764,11 @@ function ListWork() {
                           )}
                           onChange={(element) =>
                             handlerChange(
+                              index,
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               5
                             )
                           }
@@ -707,6 +781,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 1,
                             6,
                             pastMonthDay[monthAux],
@@ -715,7 +790,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 1) % pastMonthDay[monthAux],
+                              (e + 1) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 1) % pastMonthDay[monthAux],
                               6
                             )
                           }
@@ -725,6 +802,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 2,
                             6,
                             pastMonthDay[monthAux],
@@ -733,7 +811,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 2) % pastMonthDay[monthAux],
+                              (e + 2) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 2) % pastMonthDay[monthAux],
                               6
                             )
                           }
@@ -743,6 +823,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 3,
                             6,
                             pastMonthDay[monthAux],
@@ -751,7 +832,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 3) % pastMonthDay[monthAux],
+                              (e + 3) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 3) % pastMonthDay[monthAux],
                               6
                             )
                           }
@@ -761,6 +844,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 4,
                             6,
                             pastMonthDay[monthAux],
@@ -769,7 +853,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 4) % pastMonthDay[monthAux],
+                              (e + 4) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 4) % pastMonthDay[monthAux],
                               6
                             )
                           }
@@ -779,6 +865,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 5,
                             6,
                             pastMonthDay[monthAux],
@@ -787,7 +874,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 5) % pastMonthDay[monthAux],
+                              (e + 5) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 5) % pastMonthDay[monthAux],
                               6
                             )
                           }
@@ -797,6 +886,7 @@ function ListWork() {
                         <textarea
                           className="w-full h-full bg-white mt-0.5"
                           defaultValue={textGenerator(
+                            list,
                             e + 6,
                             6,
                             pastMonthDay[monthAux],
@@ -805,7 +895,9 @@ function ListWork() {
                           onChange={(element) =>
                             handlerChange(
                               element,
-                              (e + 6) % pastMonthDay[monthAux],
+                              (e + 6) % pastMonthDay[monthAux] == 0
+                                ? pastMonthDay[monthAux]
+                                : (e + 6) % pastMonthDay[monthAux],
                               6
                             )
                           }

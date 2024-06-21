@@ -97,10 +97,15 @@ export function NavbarX() {
       {userInfo.name === false ? (
         <NavbarContent justify="" className=" relative left-3">
           <NavbarItem className="hidden sm:flex">
-            <Link href="login">Iniciar sección</Link>
+            <Link href="http://localhost:5173/login">Iniciar sección</Link>
           </NavbarItem>
           <NavbarItem className="hidden sm:flex">
-            <Button as={Link} color="primary" href="register" variant="flat">
+            <Button
+              as={Link}
+              color="primary"
+              href="http://localhost:5173/register"
+              variant="flat"
+            >
               Registrarse
             </Button>
           </NavbarItem>
@@ -108,7 +113,7 @@ export function NavbarX() {
       ) : (
         <NavbarContent justify="" className=" relative left-3">
           <NavbarItem className="hidden sm:flex">
-            <Link href="profile">
+            <Link href="http://localhost:5173/profile">
               <Avatar name={userInfo.name} />
             </Link>
           </NavbarItem>
@@ -127,13 +132,22 @@ export function NavbarX() {
       )}
       <NavbarMenu>
         <NavbarMenuItem key="blnk" className=" text-center">
-          <Link color="primay" className="w-full" href="#" size="lg"></Link>
+          <Link
+            color="primay"
+            className="w-full"
+            href="http://localhost:5173/#"
+            size="lg"
+          ></Link>
         </NavbarMenuItem>
         <NavbarMenuItem
           key="makeplan"
           className=" text-center border-b-1 border-black"
         >
-          <Link color="foreground" href="makeplan" size="lg">
+          <Link
+            color="foreground"
+            href="http://localhost:5173/makeplan"
+            size="lg"
+          >
             Nuevo Plan de trabajo
           </Link>
         </NavbarMenuItem>
@@ -141,7 +155,11 @@ export function NavbarX() {
           key="listplan"
           className=" text-center  border-b-1 border-black"
         >
-          <Link color="foreground" href="listplans" size="lg">
+          <Link
+            color="foreground"
+            href="http://localhost:5173/listplans"
+            size="lg"
+          >
             Lista de planes de trabajo
           </Link>
         </NavbarMenuItem>
@@ -154,7 +172,7 @@ export function NavbarX() {
               : "hidden"
           }
         >
-          <Link href="login" color="primary" size="lg">
+          <Link href="http://localhost:5173/login" color="primary" size="lg">
             Iniciar sección
           </Link>
         </NavbarMenuItem>
@@ -163,7 +181,7 @@ export function NavbarX() {
           key="register"
           className={userInfo.name === false ? "text-center " : "hidden"}
         >
-          <Link color="danger" href="register" size="lg">
+          <Link color="danger" href="http://localhost:5173/register" size="lg">
             Registrarse
           </Link>
         </NavbarMenuItem>
@@ -175,7 +193,7 @@ export function NavbarX() {
               : "hidden"
           }
         >
-          <Link color="primary" href="profile" size="lg">
+          <Link color="primary" href="http://localhost:5173/profile" size="lg">
             Mi perfil
           </Link>
         </NavbarMenuItem>
@@ -185,7 +203,7 @@ export function NavbarX() {
         >
           <Link
             color="danger"
-            href="login"
+            href="http://localhost:5173/login"
             size="lg"
             onClick={() => {
               updateUserInfo(false, false);
