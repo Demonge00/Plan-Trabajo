@@ -48,8 +48,8 @@ export const selectPlan = (data, onFetch) => {
     .post("/workplans/select/", data.date, {
       headers: { Authorization: "Bearer " + data.accesToken },
     })
-    .then((response) => {
-      onFetch(response.data);
+    .then(async (response) => {
+      await onFetch(response.data);
       console.log(response.data);
       return;
     })
@@ -57,4 +57,11 @@ export const selectPlan = (data, onFetch) => {
       console.log(error);
       return;
     });
+};
+export const updatePlan = (data) => {
+  login
+    .post("/workplans/update/", data, {
+      headers: { Authorization: "Bearer " + data.accesToken },
+    })
+    .then((response) => {});
 };
