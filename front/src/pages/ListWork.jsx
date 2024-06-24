@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { selectPlan, updatePlan } from "../../api/login.api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useUserDetails } from "../contents/UserContext";
 import { textGenerator } from "../utilities";
 
@@ -16,8 +16,6 @@ function ListWork() {
     isSuccess: false,
   });
   const [loading, setLoading] = useState(true);
-
-  const navigate = useNavigate();
   const { userInfo } = useUserDetails();
   useEffect(() => {
     const monthdays = [
