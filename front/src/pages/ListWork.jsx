@@ -65,8 +65,8 @@ function ListWork() {
     };
     selectPlan(info, (date) => {
       setList(date);
+      setLoading(false);
     });
-    setTimeout(() => setLoading(false), 1000); //Debo Revisar esto
   }, []);
   const handlerChange = (e, key, turn) => {
     var cap = { ...list };
@@ -81,7 +81,11 @@ function ListWork() {
     setList(cap);
   };
   const handleSubmit = () => {
-    updatePlan(list, (status) => setStatus(status));
+    const data = {
+      info: { list: list, date: params.listDate },
+      accesToken: userInfo.accesToken,
+    };
+    updatePlan(data, (status) => setStatus(status));
   };
   if (status.isSuccess)
     return (
@@ -96,7 +100,7 @@ function ListWork() {
     return (
       <div className=" flex flex-col items-center">
         <div className=" flex flex-col justify-start flex-wrap gap-4  rounded ">
-          <div className="sticky mt-4 flex justify-center items-center w-full h-full border border-black z-1 top-0 bg-white">
+          <div className="w-[300px] sticky mt-4 flex justify-center items-center sm:w-full h-full border border-black z-1 top-0 bg-white">
             <h1 className=" w-1/2 block">
               Plan de trabajo de {params.listDate}
             </h1>
@@ -129,32 +133,38 @@ function ListWork() {
                   <tbody>
                     <tr className="">
                       <th className="w-10 h-20 border border-black">Turn</th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Lunes{" "}
                         {e + 1 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 1) % pastMonthDay[monthAux]}
                       </th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Martes{" "}
                         {e + 2 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 2) % pastMonthDay[monthAux]}
                       </th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Mièrcoles{" "}
                         {e + 3 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 3) % pastMonthDay[monthAux]}
                       </th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Jueves{" "}
                         {e + 4 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 4) % pastMonthDay[monthAux]}
                       </th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Viernes{" "}
                         {e + 5 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 5) % pastMonthDay[monthAux]}
                       </th>
-                      <th className="w-10 h-20 border border-black">
+                      <th className="w-1/6 h-20 border border-black break-all">
+                        Sàbado{" "}
                         {e + 6 == pastMonthDay[monthAux]
                           ? pastMonthDay[monthAux]
                           : (e + 6) % pastMonthDay[monthAux]}

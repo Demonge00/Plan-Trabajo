@@ -239,7 +239,6 @@ def createWorkplan(request):
             for i in data:
                 activity = Activity(
                     workplans=work, day=i['day'], turn=i['turn'], activity=i['activity'])
-                print(activity)
                 activity.save()
         return Response({'message': 'plan created'}, status=status.HTTP_200_OK)
 
@@ -272,5 +271,30 @@ def selectPlan(request):
             response[i.day] = {
                 i.turn: i.activity
             }
-    print(response)
     return Response(response, status=status.HTTP_200_OK)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def updatePlan(request):
+    user = request.user
+    fecha = parse(request.data['date'])
+    workplan = user.workplans_set.get(date=fecha)
+    for day, turnlist in request.data["list"].items():
+        for turn, activity in turnlist.items():
+            try:
+                prevActv = Activity.objects.get(day=day, turn=turn)
+                if (prevActv.activity == activity):
+                    continue
+                if (activity == ''):
+                    prevActv.delete()
+                else:
+                    activity = Activity(workplans=workplan, day=day,
+                                        turn=turn, activity=activity)
+                    activity.save()
+            except:
+                activity = Activity(workplans=workplan, day=day,
+                                    turn=turn, activity=activity)
+                activity.save()
+
+    return Response(status=status.HTTP_200_OK)

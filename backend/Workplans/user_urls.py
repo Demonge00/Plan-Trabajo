@@ -16,5 +16,6 @@ urlpatterns = [
     path('password/<password_secret>', views.updatePassword, name='verify-user'),
     path('create/', views.createWorkplan, name="create-workplan"),
     path('list/', views.listPlans, name="list-plans"),
-    path('select/', views.selectPlan, name="select-plan")
+    path('select/', views.selectPlan, name="select-plan"),
+    path('list/update', views.updatePlan, name="update-plan")
 ]

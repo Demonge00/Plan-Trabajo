@@ -65,7 +65,7 @@ export const updatePlan = (data, func) => {
     isSuccess: false,
   });
   login
-    .post("/workplans/list/update", data, {
+    .put("/workplans/list/update", data.info, {
       headers: { Authorization: "Bearer " + data.accesToken },
     })
     .then((response) => {
